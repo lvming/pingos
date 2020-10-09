@@ -1,4 +1,5 @@
 FROM	alpine:3.12 as builder
+RUN	sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN	apk add build-base
 RUN	apk add openssl-dev pcre-dev zlib-dev
 WORKDIR	/nginx/
@@ -13,6 +14,7 @@ RUN	./configure --with-http_ssl_module \
 	&& make && make install
 
 FROM	alpine:3.12
+RUN	sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN	apk add --no-cache openssl pcre zlib
 WORKDIR	/usr/local/nginx
 COPY	--from=builder /usr/local/nginx .
